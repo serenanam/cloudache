@@ -1,10 +1,8 @@
 import AppButton from '@/components/app-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { auth, db } from '@/config/firebase';
+import { signUpUser, validateEmail } from "@/services/userinfo";
 import { useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, StyleSheet, TextInput, View } from 'react-native';
 
@@ -16,47 +14,30 @@ export default function SignUpPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const validateEmail = (email: string) => {
-        const re = /\S+@\S+\.\S+/;
-        return re.test(email);
-    };
-
     const handleSignUp = async () => {
         if (!name || !email || !password || !confirmPassword) {
-            alert('Please fill all fields.');
-            return;
+          alert("Please fill all fields.");
+          return;
         }
+      
         if (!validateEmail(email)) {
-            alert('Please enter a valid email.');
-            return;
+          alert("Please enter a valid email.");
+          return;
         }
+      
         if (password !== confirmPassword) {
-            alert('Passwords do not match.');
-            return;
+          alert("Passwords do not match.");
+          return;
         }
-        
-
+      
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            await updateProfile(user, { displayName: name });
-
-            await setDoc(doc(db, 'users', user.uid), {
-                name,
-                email,
-                createdAt: new Date(),
-              });
-
-              Alert.alert('Success', 'Account created successfully!');
-              router.replace('/dashboard');
+          await signUpUser(name, email, password);
+          Alert.alert("Success", "Account created successfully!");
+          router.replace("/dashboard");
         } catch (error: any) {
-            console.log(error);
-            Alert.alert('Error', error.message || 'Something went wrong');
-          }
+          Alert.alert("Error", error.message || "Something went wrong");
+        }
     };
-
-    
 
     return (
         <ThemedView
