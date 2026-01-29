@@ -1,20 +1,49 @@
-import { Entypo, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { auth } from '@/config/firebase';
+import { getActiveMigraineRecord } from '@/services/migrainerecord';
+import { Entypo, FontAwesome5, Foundation, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 export default function BottomNavBar() {
     const router = useRouter();
+
+    const [hasActiveMigraine, setHasActiveMigraine] = useState(false);
+
+    useEffect(() => {
+      const fetchActiveMigraine = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+  
+        const record = await getActiveMigraineRecord(user.uid);
+        setHasActiveMigraine(!!record);
+      };
+  
+      fetchActiveMigraine();
+    }, []);
     
     return (
         <View style={styles.container}>
+          <Pressable style={styles.iconButton} onPress={() => router.push('/dashboard')}>
+            <MaterialIcons name="grid-view" size={24} color="#424685" />
+          </Pressable>
+
           <Pressable style={styles.iconButton} onPress={() => router.push('/calendar')}>
             <FontAwesome5 name="calendar-alt" size={24} color="#424685" />
           </Pressable>
     
           <Pressable style={styles.middleButton} onPress={() => router.push('/record')}>
-            <MaterialIcons name="bolt" size={32} color="#fff" />
-          </Pressable>
-    
+        {hasActiveMigraine ? (
+          <MaterialIcons name="pause" size={32} color="#fff" />
+        ) : (
+          <MaterialIcons name="bolt" size={32} color="#fff" />
+        )}
+      </Pressable>
+          
+        <Pressable style={styles.iconButton} onPress={() => router.push('/report')}>
+          <Foundation name="graph-bar" size={32} color="#424685" />
+        </Pressable>
+
           <Pressable style={styles.iconButton} onPress={() => router.push('/profile')}>
             <Entypo name="user" size={24} color="#424685" />
           </Pressable>
