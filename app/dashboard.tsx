@@ -66,7 +66,7 @@ export default function Dashboard() {
       {weather? (
         <View style={{ marginTop: 16, alignItems: 'center' }}>
           <ThemedText type="subtitle">
-            Temperature: {weather.temperature.toFixed(1)}°F
+            Temperature: {weather.temperature.toFixed(0)}°F
           </ThemedText>
           <ThemedText type="subtitle">
             Pressure: {(weather.pressure * 0.02953).toFixed(2)} inHg
