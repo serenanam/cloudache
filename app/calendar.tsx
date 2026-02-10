@@ -2,6 +2,7 @@ import BottomNavBar from "@/components/navbar";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { auth, db } from "@/config/firebase";
+import { getUserTimezone } from "@/services/location";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -17,6 +18,15 @@ function intensityToColor(intensity: number) {
     return `rgb(${r},${g},${b})`;
 }
 
+function formatDateKey(date: Date, timezone: string) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
 export default function CalendarPage() {
     const [markedDates, setMarkedDates] = useState<{ [date: string]: any }>({});
   
@@ -25,6 +35,8 @@ export default function CalendarPage() {
         const user = auth.currentUser;
         if (!user) return;
   
+        const timezone = getUserTimezone();
+        
         const migraineRef = collection(db, "users", user.uid, "migraine_records");
         const q = query(migraineRef, orderBy("startDate", "desc"));
         const snapshot = await getDocs(q);
@@ -34,8 +46,8 @@ export default function CalendarPage() {
         snapshot.forEach((doc) => {
           const data = doc.data();
           const dateObj = data.startDate.toDate();
-          const dateKey = dateObj.toISOString().split("T")[0]; // yyyy-mm-dd
           const intensity = data.intensity || 1;
+          const dateKey = formatDateKey(dateObj, timezone);
   
           dates[dateKey] = {
             customStyles: {

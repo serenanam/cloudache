@@ -1,3 +1,4 @@
+import * as Localization from "expo-localization";
 import * as Location from 'expo-location';
 import { Alert } from "react-native";
 
@@ -21,4 +22,14 @@ export const getUserLocation = async () => {
       longitude: location.coords.longitude,
     };
   };
+
+  export const getUserTimezone = () => {
+    // Get current location's timezone
+    const timezone = Localization.getCalendars()[0]?.timeZone ?? "UTC";
+    console.log("User timezone:", timezone);
+
+    return timezone;
+
+  };
+      
   
