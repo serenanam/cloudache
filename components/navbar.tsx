@@ -1,6 +1,6 @@
 import { auth } from '@/config/firebase';
 import { getActiveMigraineRecord } from '@/services/migrainerecord';
-import { Entypo, FontAwesome5, Foundation, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, FontAwesome5, Foundation, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -25,7 +25,7 @@ export default function BottomNavBar() {
     return (
         <View style={styles.container}>
           <Pressable style={styles.iconButton} onPress={() => router.push('/dashboard')}>
-            <MaterialIcons name="grid-view" size={24} color="#424685" />
+            <Ionicons name="grid" size={24} color="#424685" />          
           </Pressable>
 
           <Pressable style={styles.iconButton} onPress={() => router.push('/calendar')}>

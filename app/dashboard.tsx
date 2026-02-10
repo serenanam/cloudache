@@ -69,7 +69,7 @@ export default function Dashboard() {
             Temperature: {weather.temperature.toFixed(0)}°F
           </ThemedText>
           <ThemedText type="subtitle">
-            Pressure: {(weather.pressure * 0.02953).toFixed(2)} inHg
+            Pressure: {(weather.pressure).toFixed(2)} inHg
           </ThemedText>
         </View>
       ) : (
