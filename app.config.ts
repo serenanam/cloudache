@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 export default {
   "expo": {
+    "owner": "serenanams-organization",
     "name": "cloudache",
     "slug": "cloudache",
     "version": "1.0.0",
@@ -48,6 +49,9 @@ export default {
       "reactCompiler": true
     },
     "extra": {
+      "eas": {
+      "projectId": "3b4cff00-756c-49a7-9f81-6a84c0f54a9c"
+      },
       "FIREBASE_API_KEY": process.env.FIREBASE_API_KEY,
       "FIREBASE_AUTH_DOMAIN": process.env.FIREBASE_AUTH_DOMAIN,
       "FIREBASE_PROJECT_ID": process.env.FIREBASE_PROJECT_ID,
@@ -55,6 +59,12 @@ export default {
       "FIREBASE_MESSAGING_SENDER_ID": process.env.FIREBASE_MESSAGING_SENDER_ID,
       "FIREBASE_APP_ID": process.env.FIREBASE_APP_ID,
       "FIREBASE_MEASUREMENT_ID": process.env.FIREBASE_MEASUREMENT_ID
-    }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3b4cff00-756c-49a7-9f81-6a84c0f54a9c"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }    
   }
 }
