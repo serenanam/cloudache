@@ -1,13 +1,33 @@
 import AppButton from '@/components/app-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function LandingPage() {
   console.log('LandingPage rendered');
   const router = useRouter();
+  const [checkingLogin, setCheckingLogin] = useState(true);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      if (token) {
+        router.replace('/dashboard'); // redirect if logged in
+      } else {
+        setCheckingLogin(false);
+      }
+    };
+    checkLogin();
+  }, []);
+
+  if (checkingLogin) {
+    return null;
+  }
   
+
   return (
     <ThemedView
         gradientColors={['#dec2db00', '#dec2dbaa', '#dec2dbb3', '#424685', '#424685']}
