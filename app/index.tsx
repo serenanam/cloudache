@@ -1,31 +1,30 @@
 import AppButton from '@/components/app-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth } from '@/config/firebase';
 import { useRouter } from 'expo-router';
+import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function LandingPage() {
   console.log('LandingPage rendered');
   const router = useRouter();
-  const [checkingLogin, setCheckingLogin] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkLogin = async () => {
-      const token = await AsyncStorage.getItem('authToken');
-      if (token) {
-        router.replace('/dashboard'); // redirect if logged in
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace('/dashboard');
       } else {
-        setCheckingLogin(false);
+        setLoading(false);
       }
-    };
-    checkLogin();
+    });
+
+    return unsubscribe;
   }, []);
 
-  if (checkingLogin) {
-    return null;
-  }
+  if (loading) return null;
   
 
   return (
