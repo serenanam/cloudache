@@ -4,7 +4,7 @@ import { StyleSheet, Text, type TextProps } from 'react-native';
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'header';
 };
 
 export function ThemedText({
@@ -14,7 +14,7 @@ export function ThemedText({
   type = 'default',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor({ light: lightColor ?? '#ffffff', dark: darkColor }, 'text');
 
   // Select fontFamily based on type
   const fontFamily =
@@ -29,6 +29,7 @@ export function ThemedText({
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
+        type == 'header' ? styles.header : undefined,
         style,
       ]}
       {...rest}
@@ -46,12 +47,16 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   title: {
+    fontSize: 56,
+    lineHeight: 60,
+  },
+  subtitle: {
     fontSize: 32,
     lineHeight: 40,
   },
-  subtitle: {
-    fontSize: 20,
-    lineHeight: 28,
+  header: {
+    fontSize: 24,
+    lineHeight: 30,
   },
   link: {
     fontSize: 16,
