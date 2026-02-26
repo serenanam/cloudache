@@ -1,19 +1,19 @@
 // components/AppButton.tsx
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { DimensionValue, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { ThemedText } from './themed-text';
 
 type AppButtonProps = {
   title: string;
   onPress: () => void;
-  width?: number | string;
+  width?: number | DimensionValue;
   height?: number;
   style?: ViewStyle; // extra styles if needed
 };
 
-export default function AppButton({ title, onPress, width = '80%', height = 50, style }: AppButtonProps) {
+export default function AppButton({ title, onPress, style }: AppButtonProps) {
   return (
     <TouchableOpacity
-      style={[styles.button, { width, height }, style]}
+      style={[styles.button, style]}
       onPress={onPress}
       activeOpacity={0.8}
     >
@@ -30,6 +30,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    height: 40,
+    width: 180,
+
+    //drop shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   text: {
     color: '#fff',

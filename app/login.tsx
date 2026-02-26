@@ -6,11 +6,11 @@ import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    TextInput,
-    View
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInput,
+  View
 } from 'react-native';
 
 export default function LoginPage() {
@@ -35,58 +35,59 @@ export default function LoginPage() {
 
   return (
     <ThemedView
-        gradientColors={['#dec2db00', '#dec2dbaa', '#dec2dbb3', '#424685', '#424685']}
-        gradientStart={{ x: 0.2, y: 0 }}
-        gradientEnd={{ x: 0.86, y: 1 }}
-        style={{flex: 1 }}>
+      gradientColors={['#dec2db00', '#dec2dbaa', '#dec2dbb3', '#424685', '#424685']}
+      gradientStart={{ x: 0.2, y: 0 }}
+      gradientEnd={{ x: 0.86, y: 1 }}
+      style={{ flex: 1 }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ThemedText type="title" style={{ marginBottom: 24 }}>
-          Log In
+        <ThemedText type="subtitle" style={{ marginBottom: 16 }}>
+          Welcome Back!
         </ThemedText>
 
         <View style={styles.textcontainer}>
-            <TextInput
+          <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor="#fff"
             autoCapitalize="none"
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
-            />
+          />
 
-            <TextInput
+          <TextInput
             style={styles.input}
             placeholder="Password"
+            placeholderTextColor="#fff"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
-            />
+          />
         </View>
-        
+
+        <ThemedText style={{ marginTop: 16, opacity: 0.8 }}>
+          Don't have an account?{' '}
+          <ThemedText
+            onPress={() => router.push('/signup')}
+            style={{
+              fontWeight: '600',
+              textDecorationLine: 'underline',
+            }}
+          >
+            Sign Up
+          </ThemedText>
+        </ThemedText>
 
         <AppButton
           title="Log In"
           onPress={handleLogin}
-          height={50}
-          width={160}
           style={{ marginTop: 16, backgroundColor: '#424685' }}
         />
 
-        <ThemedText style={{ marginTop: 16, opacity: 0.8 }}>
-                Don't have an account?{' '}
-                <ThemedText
-                    onPress={() => router.push('/signup')}
-                    style={{
-                    fontWeight: '600',
-                    textDecorationLine: 'underline',
-                    }}
-                >
-                    Sign Up
-                </ThemedText>
-            </ThemedText>
+
       </KeyboardAvoidingView>
     </ThemedView>
   );
@@ -100,19 +101,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   textcontainer: {
-        gap: 20,
-        padding: 20,
-        borderRadius: 8,
-        backgroundColor: '#636395',
-        width: '100%',
+    gap: 20,
+    padding: 10,
+    width: '90%',
   },
   input: {
-    borderWidth: 1,
-      borderColor: '#ccc',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      borderRadius: 8,
-      fontSize: 16,
-      backgroundColor: '#D9D9D9',
+    borderBottomWidth: 2,
+    borderColor: '#ffff',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    fontFamily: 'Raleway-SemiBold',
+    color: '#fff',
   },
 });
