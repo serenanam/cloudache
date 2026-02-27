@@ -1,17 +1,20 @@
-import { HelloWave } from '@/components/hello-wave';
 import BottomNavBar from '@/components/navbar';
 import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { auth, db } from '@/config/firebase';
 import { getUserLocation } from '@/services/location';
 import { getWeather } from '@/services/weather';
+import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 export default function Dashboard() {
   const [name, setName] = useState<string | null>(null);
-  const [weather, setWeather] = useState<{temperature: number; pressure: number} | null>(null);
+  const [weather, setWeather] = useState<{ temperature: number; pressure: number } | null>(null);
+  const [location, setLocation] = useState<{ latitude: number; longitude: number; name: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,15 +35,16 @@ export default function Dashboard() {
           setLoading(false);
           return;
         }
+        setLocation(coords);
 
         const weatherData = await getWeather(coords.latitude, coords.longitude);
 
         setWeather(weatherData);
 
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -56,50 +60,134 @@ export default function Dashboard() {
   }
 
   return (
-    <View style={styles.screen}>
-        <View style={styles.container}>
-      <View style={styles.welcomecontainer}> 
-        <ThemedText type="title">{name ? `Hi, ${name}` : 'Hi '} </ThemedText>
-        <HelloWave/>
-      </View>
 
-      {weather? (
-        <View style={{ marginTop: 16, alignItems: 'center' }}>
-          <ThemedText type="subtitle">
-            Temperature: {weather.temperature.toFixed(0)}°F
+    <ThemedView
+    gradientColors={['#9c8eb7', '#424685', '#9c8eb7'] as const}
+    gradientLocations={[0, 0.525, 1] as const}
+    gradientStart={{x: 1.928, y: -0.19}}
+    gradientEnd={{x: -0.25, y: 1.105}}
+    style={styles.screen}
+    >
+
+      <View style={styles.container}>
+        <View style={styles.contentWrapper}>
+          <ThemedText type="subtitle">{name ? `Hi, ${name}` : 'Hi '}</ThemedText>
+
+          <View style={styles.preForecastContainer}>
+            <ThemedText type="header">Migraine Forecast</ThemedText>
+          </View>
+
+          <ThemedText type="header">Today's Forecast</ThemedText>
+          <View style={styles.locationText}>
+            <Ionicons name="location-outline" size={18} color="#fff" />
+            <ThemedText type="default">{location?.name ?? 'Unknown Location'}</ThemedText>
+            
+          </View>
+          
+          {weather ? (
+          <View style={styles.locForecastContainer}>
+            <View style={styles.forecastInfoContainer}>
+              <View style={styles.iconText}>
+                <MaterialIcons name="cloud-queue" size={18} color="#fff" />
+                <ThemedText type="default">Temperature</ThemedText>
+              </View>
+              
+              <ThemedText type="default">
+                {weather.temperature.toFixed(0)}°F
+              </ThemedText>
+            </View>
+
+            <View style={styles.forecastInfoContainer}>
+              <View style={styles.iconText}>
+                <Entypo name="gauge" size={18} color="#fff" />
+                <ThemedText type="default">Pressure</ThemedText>
+              </View>
+              
+
+              <ThemedText type="default">
+                {(weather.pressure).toFixed(2)} inHg
+              </ThemedText>
+
+            </View>
+          </View>
+        ) : (
+          <ThemedText type="default" style={{ marginTop: 16 }}>
+            Weather data not available
           </ThemedText>
-          <ThemedText type="subtitle">
-            Pressure: {(weather.pressure).toFixed(2)} inHg
-          </ThemedText>
+        )}
+
         </View>
-      ) : (
-        <ThemedText type="subtitle" style={{ marginTop: 16 }}>
-          Weather data not available
-        </ThemedText>
-      )}
 
 
-      
+
+        
+
+
+
       </View>
-      <BottomNavBar/>
-    </View>
-    
+      
+      <BottomNavBar />
+    </ThemedView>
+
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#636395',
+    // backgroundColor: '#636395',
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: 110,
     paddingHorizontal: 24,
   },
-  welcomecontainer: {
+  contentWrapper: {
+    width: '95%',
+    alignItems: 'flex-start',
+  },
+  locationText: {
+    marginLeft: 1,
     flexDirection: 'row',
     alignItems: 'center',
-  }
+    gap: 2,
+    marginBottom: 20,
+    marginTop: 5,
+  },
+  iconText: {
+    marginLeft: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 5,
+    marginBottom: 20,
+    marginTop: 5,
+  },
+  preForecastContainer: {
+    alignSelf: 'center',
+    width: '100%',
+    height: 300,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: "#424685",
+    borderRadius: 10,
+    padding: 16,
+    marginVertical: 30,
+  },
+  locForecastContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  forecastInfoContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '45%',
+    height: 150,
+    backgroundColor: "#424685",
+    borderRadius: 10,
+    padding: 5,
+  },
 });

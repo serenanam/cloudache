@@ -2,6 +2,20 @@ import * as Localization from "expo-localization";
 import * as Location from 'expo-location';
 import { Alert } from "react-native";
 
+export function getLocationName(place?: {
+  district?: string | null;
+  city?: string | null;
+  region?: string | null;
+}): string {
+  if (!place) return "Unknown Location";
+
+  if (place.district && place.region) return `${place.district}, ${place.region}`;
+  if (place.city && place.region) return `${place.city}, ${place.region}`;
+  if (place.region) return place.region;
+
+  return "Unknown Location";
+}
+
 export const getUserLocation = async () => {
     // Ask for foreground location permissions
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -13,14 +27,24 @@ export const getUserLocation = async () => {
       return null;
     }
   
+    
     // Get current location
     const location = await Location.getCurrentPositionAsync({});
-    console.log('Device location:', location.coords); // latitude, longitude
-  
-    return {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
+    const { latitude, longitude } = location.coords;
+    const placemarks = await Location.reverseGeocodeAsync({ latitude, longitude});
+    // Take first placemark (closest)
+    const place = placemarks[0];
+    const name = getLocationName(place);
+
+    console.log('Device location:', latitude, longitude, 'Name:', name);
+
+  return {
+    latitude,
+    longitude,
+    name,
+  };
+    
+    
   };
 
   export const getUserTimezone = () => {

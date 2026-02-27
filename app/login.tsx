@@ -34,11 +34,7 @@ export default function LoginPage() {
   };
 
   return (
-    <ThemedView
-      gradientColors={['#dec2db00', '#dec2dbaa', '#dec2dbb3', '#424685', '#424685']}
-      gradientStart={{ x: 0.2, y: 0 }}
-      gradientEnd={{ x: 0.86, y: 1 }}
-      style={{ flex: 1 }}>
+    <ThemedView style={{ flex: 1 }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
