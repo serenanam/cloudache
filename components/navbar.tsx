@@ -1,5 +1,5 @@
 import { auth } from '@/config/firebase';
-import { getActiveMigraineRecord } from '@/services/migrainerecord';
+import { getActiveMigraineRecord } from '@/services/migraineRecord';
 import { FontAwesome5, Foundation, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';

@@ -8,7 +8,7 @@ export default function LandingPage() {
   const router = useRouter();
 
   return (
-    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24,}}>
         <ThemedText type="title" style={styles.title}>Cloudache</ThemedText>
         <ThemedText type="header" style={styles.header}>Track migraines easily</ThemedText>
 

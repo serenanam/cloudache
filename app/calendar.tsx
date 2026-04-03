@@ -5,7 +5,7 @@ import { auth, db } from "@/config/firebase";
 import { getUserTimezone } from "@/services/location";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 
 function intensityToColor(intensity: number) {
@@ -35,7 +35,9 @@ export default function CalendarPage() {
         const user = auth.currentUser;
         if (!user) return;
   
+        const today = new Date();
         const timezone = getUserTimezone();
+        const todayKey = formatDateKey(today, timezone);
         
         const migraineRef = collection(db, "users", user.uid, "migraine_records");
         const q = query(migraineRef, orderBy("startDate", "desc"));
@@ -48,12 +50,16 @@ export default function CalendarPage() {
           const dateObj = data.startDate.toDate();
           const intensity = data.intensity || 1;
           const dateKey = formatDateKey(dateObj, timezone);
+
+          const isToday = dateKey === todayKey;
   
           dates[dateKey] = {
             customStyles: {
               container: {
                 backgroundColor: intensityToColor(intensity),
                 borderRadius: 8,
+                borderWidth: isToday ? 3 : 0,
+                borderColor: isToday ? "#424685" : undefined,
               },
               text: {
                 color: "#fff",
@@ -62,6 +68,21 @@ export default function CalendarPage() {
             },
           };
         });
+        if (!dates[todayKey]) {
+          dates[todayKey] = {
+            customStyles: {
+              container: {
+                borderColor: "#424685",
+                borderWidth: 2,
+                borderRadius: 8,
+              },
+              text: {
+                color: "#000",
+                fontWeight: "600",
+              },
+            },
+          };
+      }
   
         setMarkedDates(dates);
       };
@@ -71,10 +92,12 @@ export default function CalendarPage() {
   
     return (
       <ThemedView style={styles.container}>
-        <ThemedText type="title" style={{ marginBottom: 12, backgroundColor: "#"}}>
+        <ThemedText type="subtitle" style={styles.header}>
           Migraine Calendar
         </ThemedText>
   
+        <View style={styles.calendarWrapper}>
+          
         <Calendar
           markingType={"custom"}
           markedDates={markedDates}
@@ -86,6 +109,7 @@ export default function CalendarPage() {
             textMonthFontWeight: "600",
           }}
         />
+        </View>
         <BottomNavBar/>
       </ThemedView>
     );
@@ -95,7 +119,22 @@ export default function CalendarPage() {
     container: {
       flex: 1,
       paddingHorizontal: 16,
-      justifyContent: "center",
+      paddingTop: 110,
+      justifyContent: 'flex-start',
       backgroundColor: "#636395",
     },
+    header: {
+      alignSelf: 'center',
+    },
+    calendarWrapper: {
+      backgroundColor: "#fff",
+      borderRadius: 20,
+      padding: 12,
+      overflow: "hidden",
+      shadowColor: "#000",
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+      shadowOffset: { width: 0, height: 4 },
+      marginVertical: 32,
+    }
   });
