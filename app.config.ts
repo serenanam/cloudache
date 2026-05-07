@@ -26,7 +26,15 @@ export default {
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro",
+      "meta": {
+        "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+        "theme-color": "#E6F4FE",
+        "apple-mobile-web-app-capable": "yes",
+        "apple-mobile-web-app-status-bar-style": "default",
+        "apple-mobile-web-app-title": "Cloudache"
+      }
     },
     "plugins": [
       "expo-router",
@@ -51,7 +59,7 @@ export default {
     },
     "extra": {
       "eas": {
-      "projectId": "3b4cff00-756c-49a7-9f81-6a84c0f54a9c"
+        "projectId": "3b4cff00-756c-49a7-9f81-6a84c0f54a9c"
       },
       "FIREBASE_API_KEY": process.env.FIREBASE_API_KEY,
       "FIREBASE_AUTH_DOMAIN": process.env.FIREBASE_AUTH_DOMAIN,
@@ -66,6 +74,6 @@ export default {
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }    
+    }
   }
 }
