@@ -1,15 +1,15 @@
 import AppButton from "@/components/app-button";
+import DateTimePicker from "@/components/date-picker";
+import Slider from "@/components/slider-input";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { auth } from "@/config/firebase";
 import {
-    MigraineRecord,
-    getActiveMigraineRecord,
-    saveMigraineRecord,
-    updateMigraineRecord,
+  MigraineRecord,
+  getActiveMigraineRecord,
+  saveMigraineRecord,
+  updateMigraineRecord,
 } from "@/services/migraineRecord";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import Slider from "@react-native-community/slider";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet } from "react-native";
