@@ -20,13 +20,13 @@ export type MigraineRecord = {
   startDate: Date;
   intensity: number;
   created_at: any;
-  startTemperature: number;
-  startPressure: number;
-  tempDiff24h: number;
-  pressureDiff24h: number;
+  startTemperature?: number;
+  startPressure?: number;
+  tempDiff24h?: number;
+  pressureDiff24h?: number;
   endTemperature?: number;
   endPressure?: number;
-  endDate: Date | null;
+  endDate?: Date | null;
 };
 
 export async function saveMigraineRecord(userId: string, startDate: Date, intensity: number) {
